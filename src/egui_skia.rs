@@ -25,12 +25,12 @@ pub fn rasterize(
     options: Option<RasterizeOptions>,
 ) -> Surface {
     let mut surface = raster_n32_premul(size).expect("Failed to create surface");
-    draw_onto_surface(&mut surface, ui, options);
+    draw_onto_canvas(surface.canvas(), ui, options);
     surface
 }
 
-pub fn draw_onto_surface(
-    surface: &mut Surface,
+pub fn draw_onto_canvas(
+    canvas: &Canvas,
     mut ui: impl FnMut(&Context),
     options: Option<RasterizeOptions>,
 ) {
@@ -40,11 +40,13 @@ pub fn draw_onto_surface(
     } = options.unwrap_or_default();
     let mut backend = EguiSkia::new(pixels_per_point);
 
+    let image_info = canvas.image_info();
+
     let input = egui::RawInput {
         screen_rect: Some(
             [
                 Pos2::default(),
-                Pos2::new(surface.width() as f32, surface.height() as f32),
+                Pos2::new(image_info.width() as f32, image_info.height() as f32),
             ]
             .into(),
         ),
@@ -54,7 +56,7 @@ pub fn draw_onto_surface(
     for _ in 0..frames_before_screenshot {
         backend.run(input.clone(), &mut ui);
     }
-    backend.paint(surface.canvas());
+    backend.paint(canvas);
 }
 
 /// Convenience wrapper for using [`egui`] from a [`skia`] app.

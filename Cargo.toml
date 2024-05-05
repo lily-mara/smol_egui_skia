@@ -1,6 +1,6 @@
 [package]
 name = "smol_egui_skia"
-version = "0.4.0"
+version = "0.1.0"
 edition = "2021"
 description = "smol_egui_skia is a skia integration for the egui ui library. It differs from the egui_skia library in that it is NOT intended to allow you to create _ui applications_ that render egui UIs with skia, rather just render images using egui as layout engine."
 license = "MIT"

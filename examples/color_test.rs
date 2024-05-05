@@ -1,5 +1,5 @@
-use egui_skia::rasterize;
 use skia_safe::EncodedImageFormat;
+use smol_egui_skia::rasterize;
 use std::fs::File;
 use std::io::Write;
 

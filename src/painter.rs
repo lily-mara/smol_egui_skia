@@ -6,10 +6,11 @@ use egui::epaint::ahash::AHashMap;
 use egui::epaint::Mesh16;
 use egui::epaint::Primitive;
 use egui::{ClippedPrimitive, ImageData, Pos2, TextureId, TexturesDelta};
+use skia_safe::surfaces::raster_n32_premul;
 use skia_safe::vertices::VertexMode;
 use skia_safe::{
     scalar, BlendMode, Canvas, ClipOp, Color, ConditionallySend, Data, Drawable, Image, ImageInfo,
-    Paint, PictureRecorder, Point, Rect, Sendable, Surface, Vertices,
+    Paint, PictureRecorder, Point, Rect, Sendable, Vertices,
 };
 
 #[derive(Eq, PartialEq)]
@@ -42,7 +43,7 @@ impl Painter {
 
     pub fn paint_and_update_textures(
         &mut self,
-        canvas: &mut Canvas,
+        canvas: &Canvas,
         dpi: f32,
         primitives: Vec<ClippedPrimitive>,
         textures_delta: TexturesDelta,
@@ -92,7 +93,7 @@ impl Painter {
                 Some(pos) => {
                     let old_image = self.paints.remove(id).unwrap().image;
 
-                    let mut surface = Surface::new_raster_n32_premul(skia_safe::ISize::new(
+                    let mut surface = raster_n32_premul(skia_safe::ISize::new(
                         old_image.width() as i32,
                         old_image.height() as i32,
                     ))
@@ -177,7 +178,7 @@ impl Painter {
             match primitive.primitive {
                 Primitive::Mesh(mesh) => {
                     canvas.set_matrix(skia_safe::M44::new_identity().set_scale(dpi, dpi, 1.0));
-                    let mut arc = skia_safe::AutoCanvasRestore::guard(canvas, true);
+                    let arc = skia_safe::AutoCanvasRestore::guard(canvas, true);
 
                     #[cfg(feature = "cpu_fix")]
                     let meshes = mesh
@@ -370,7 +371,7 @@ pub struct EguiSkiaPaintCallback {
 }
 
 impl EguiSkiaPaintCallback {
-    pub fn new<F: Fn(&mut Canvas) + Send + Sync + 'static>(callback: F) -> EguiSkiaPaintCallback {
+    pub fn new<F: Fn(&Canvas) + Send + Sync + 'static>(callback: F) -> EguiSkiaPaintCallback {
         EguiSkiaPaintCallback {
             callback: Box::new(move |rect| {
                 let mut pr = PictureRecorder::new();

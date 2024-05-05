@@ -1,5 +1,5 @@
-use egui_skia::{rasterize, RasterizeOptions};
 use skia_safe::{EncodedImageFormat, Paint, Point};
+use smol_egui_skia::{rasterize, RasterizeOptions};
 use std::fs::File;
 use std::io::Write;
 
@@ -32,7 +32,7 @@ pub fn main() {
         },
         Some(RasterizeOptions {
             pixels_per_point: 1.0,
-            frames_before_screenshot: 2
+            frames_before_screenshot: 2,
         }),
     );
 

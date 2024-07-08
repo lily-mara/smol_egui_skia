@@ -14,14 +14,16 @@ cpu_fix = []
 opt-level = 3
 
 [dependencies]
-egui = "0.27"
-skia-safe = { version = "0.73", features = [] }
+egui = "0.28"
+skia-safe = { version = "0.75", features = [] }
 
 [dev-dependencies]
-softbuffer = { git = "https://github.com/john01dav/softbuffer" }
-egui_demo_lib = "0.27"
+softbuffer = "0.4.5"
+egui_demo_lib = "0.28"
 raw-window-handle = "0.5"
 foreign-types-shared = "0.1.1"
+egui_extras = { version = "0.28", features = ["all_loaders"] }
+image = { version = "0.25.1", features = ["png", "jpeg"] }
 
 [target.'cfg(target_os = "macos")'.dev-dependencies]
 metal = "0.24"

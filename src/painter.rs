@@ -51,11 +51,13 @@ impl Painter {
         textures_delta.set.iter().for_each(|(id, image_delta)| {
             let delta_image = match &image_delta.image {
                 ImageData::Color(color_image) => Image::from_raster_data(
-                    &ImageInfo::new_n32_premul(
+                    &ImageInfo::new(
                         skia_safe::ISize::new(
                             color_image.width() as i32,
                             color_image.height() as i32,
                         ),
+                        skia_safe::ColorType::RGB888x,
+                        skia_safe::AlphaType::Premul,
                         None,
                     ),
                     Data::new_copy(

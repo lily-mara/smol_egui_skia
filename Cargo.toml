@@ -15,7 +15,7 @@ opt-level = 3
 
 [dependencies]
 egui = "0.29"
-skia-safe = { version = "0.75", features = [] }
+skia-safe = { version = "0.78", features = [] }
 
 [dev-dependencies]
 softbuffer = "0.4.5"

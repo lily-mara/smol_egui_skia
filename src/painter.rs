@@ -9,8 +9,8 @@ use egui::{ClippedPrimitive, ImageData, Pos2, TextureId, TexturesDelta};
 use skia_safe::surfaces::raster_n32_premul;
 use skia_safe::vertices::VertexMode;
 use skia_safe::{
-    scalar, BlendMode, Canvas, ClipOp, Color, ConditionallySend, Data, Drawable, Image, ImageInfo,
-    Paint, PictureRecorder, Point, Rect, Sendable, Vertices,
+    images, scalar, BlendMode, Canvas, ClipOp, Color, ConditionallySend, Data, Drawable, Image,
+    ImageInfo, Paint, PictureRecorder, Point, Rect, Sendable, Vertices,
 };
 
 #[derive(Eq, PartialEq)]
@@ -50,7 +50,7 @@ impl Painter {
     ) {
         textures_delta.set.iter().for_each(|(id, image_delta)| {
             let delta_image = match &image_delta.image {
-                ImageData::Color(color_image) => Image::from_raster_data(
+                ImageData::Color(color_image) => images::raster_from_data(
                     &ImageInfo::new(
                         skia_safe::ISize::new(
                             color_image.width() as i32,
@@ -73,7 +73,7 @@ impl Painter {
                 .unwrap(),
                 ImageData::Font(font) => {
                     let pixels = font.srgba_pixels(Some(1.0));
-                    Image::from_raster_data(
+                    images::raster_from_data(
                         &ImageInfo::new_n32_premul(
                             skia_safe::ISize::new(font.width() as i32, font.height() as i32),
                             None,
